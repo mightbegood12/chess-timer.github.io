@@ -1,0 +1,95 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --current-player: red;
+  --waiting-player: green;
+}
+
+.game-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+
+.plyr-1 {
+  background-color: var(--current-player);
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 1s;
+  transition-timing-function: ease-in-out;
+}
+
+.plyr-2 {
+  background-color: var(--waiting-player);
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 1s;
+  transition-timing-function: ease-in-out;
+}
+.plyr-1:hover,
+.plyr-2:hover {
+  cursor: pointer;
+  transition: background-color 1000ms ease-in;
+}
+
+.plyr-1:hover {
+  background-color: linear-gradient(270deg, #5777d9 0%, #b8ebf9 100%);
+}
+.plyr-2:hover {
+  background-color: linear-gradient(270deg, #d7aa32 0%, #f0b172 100%);
+}
+
+#Timer1,
+#Timer2 {
+  background-color: black;
+  opacity: 0.5;
+  color: white;
+  text-align: center;
+  font-size: 2rem;
+  width: 7rem;
+  padding: 0.5rem;
+}
+
+#Timer1 {
+  border-radius: 20px 20px 0px 0px;
+}
+#Timer2 {
+  border-radius: 0px 0px 20px 20px;
+}
+.p1 {
+  margin-top: auto;
+}
+
+.btn {
+  border: none;
+}
+.text {
+  padding-top: 4rem;
+  position: absolute;
+  font-size: 5rem;
+  font-weight: bold;
+  opacity: 0.5;
+}
+
+.winner {
+  position: absolute;
+  top: 50;
+  font-size: 5rem;
+  font-weight: bold;
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  margin: auto;
+  display: none;
+  background: black;
+  color: white;
+  z-index: 20;
+}
