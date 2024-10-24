@@ -1,5 +1,5 @@
-let countdownTime1 = 5; // 10 minutes for Player 1
-let countdownTime2 = 5; // 10 minutes for Player 2
+let countdownTime1 = 600; // 10 minutes for Player 1
+let countdownTime2 = 600; // 10 minutes for Player 2
 let timer1, timer2; // Store the timer interval IDs for both players
 let isPaused1 = true; // Track if Player 1's timer is paused
 let isPaused2 = true; // Track if Player 2's timer is paused
