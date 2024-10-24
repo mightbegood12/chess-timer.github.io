@@ -7,13 +7,30 @@
     <title>Chess Timer</title>
   </head>
   <body>
-    <div class="winner">dfsf</div>
+    <div class="game-page">
+      <div class="game-text">Chess Timer</div>
+      <div id="timerForm">
+        <label for="countdownTime">Choose Time</label>
+        <select id="countdownTime" name="countdownTime" required>
+          <option value="300">5 minutes</option>
+          <option value="600">10 minutes</option>
+          <option value="1800">30 minutes</option>
+        </select>
+        <button class="btn-start" onclick="startGame()">Play</button>
+      </div>
+    </div>
+    <div class="winner-display">
+      <div class="winner">Player wins</div>
+      <button onclick="restartTimer()" class="btn-restart">Play Again</button>
+    </div>
     <div class="game-wrapper">
       <button class="btn plyr-1" onclick="startTimer1()">
         <div class="text">Player 1</div>
         <div id="Timer1" class="p1">10:00</div>
       </button>
-
+      <button class="reset-btn" onclick="window.location.reload()">
+        Reset
+      </button>
       <button class="btn plyr-2" onclick="startTimer2()">
         <div id="Timer2" class="p2">10:00</div>
         <div class="text">Player 2</div>

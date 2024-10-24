@@ -1,51 +1,43 @@
-let countdownTime1 = 600; // 10 minutes for Player 1
-let countdownTime2 = 600; // 10 minutes for Player 2
-let timer1, timer2; // Store the timer interval IDs for both players
-let isPaused1 = true; // Track if Player 1's timer is paused
-let isPaused2 = true; // Track if Player 2's timer is paused
-const winner = document.querySelector(".winner");
+let countdownTime1, countdownTime2;
+let timer1, timer2;
+let isPaused1 = true;
+let isPaused2 = true;
+let selectedTime;
 
-// Function to update Player 1's timer
-function updateTimer1() {
-  const timerElement1 = document.getElementById("Timer1");
-  let minutes = Math.floor(countdownTime1 / 60);
-  let seconds = countdownTime1 % 60;
+const winner = document.querySelector(".winner-display");
+const winnerBtn = document.querySelector(".btn-restart");
+const winnerText = document.querySelector(".winner");
+const timerElement1 = document.getElementById("Timer1");
+const timerElement2 = document.getElementById("Timer2");
+const gamePage = document.querySelector(".game-page");
 
-  seconds = seconds < 10 ? "0" + seconds : seconds;
-  timerElement1.textContent = `${minutes}:${seconds}`;
-
-  if (countdownTime1 <= 0) {
-    clearInterval(timer1);
-    timerElement1.textContent = "Time's up!";
-    winner.style.display = "block";
-    winner.style.transition = "background 3s";
-    winner.textContent = "Player 2 Wins!";
-  }
-
-  countdownTime1--; // Decrease time
+function startGame() {
+  gamePage.style.display = "none";
+  console.log(gamePage.style.display);
+  selectedTime = parseInt(document.getElementById("countdownTime").value, 10);
+  countdownTime1 = countdownTime2 = selectedTime;
+  restartTimer();
+  startTimer1();
 }
 
-// Function to update Player 2's timer
-function updateTimer2() {
-  const timerElement2 = document.getElementById("Timer2");
-  let minutes = Math.floor(countdownTime2 / 60);
-  let seconds = countdownTime2 % 60;
+function updateTimer(countdownTime, timerElement, timer, player) {
+  let minutes = Math.floor(countdownTime / 60);
+  let seconds = countdownTime % 60;
 
   seconds = seconds < 10 ? "0" + seconds : seconds;
-  timerElement2.textContent = `${minutes}:${seconds}`;
+  timerElement.textContent = `${minutes}:${seconds}`;
 
-  if (countdownTime2 <= 0) {
-    clearInterval(timer2);
-    timerElement2.textContent = "Time's up!";
-    winner.style.display = "block";
-    winner.style.transition = "background 3s";
-    winner.textContent = "Player 1 Wins!";
+  if (countdownTime <= 0) {
+    clearInterval(timer);
+    timerElement.textContent = "Time's up!";
+    winner.style.display = "flex";
+    winnerText.textContent = `Player ${player} Wins!`;
+    return;
   }
 
-  countdownTime2--; // Decrease time
+  return countdownTime - 1; // Decrement and return the new time
 }
 
-// Helper function to change CSS variable for active/paused states
 function setCSSVariable(isPlayer1Active) {
   if (isPlayer1Active) {
     document.documentElement.style.setProperty("--current-player", "red"); // Player 1 is active
@@ -59,40 +51,38 @@ function setCSSVariable(isPlayer1Active) {
 // Function to start Player 1's timer and pause Player 2's timer
 function startTimer1() {
   if (isPaused2) {
-    // Pause Player 2's timer if it's running
     clearInterval(timer1);
-    isPaused1 = true;
-
-    // Start Player 1's timer
     isPaused2 = false;
-    setCSSVariable(false); // Set CSS for Player 1 active
-    timer2 = setInterval(updateTimer2, 1000);
+    isPaused1 = true;
+    setCSSVariable(false);
+    timer2 = setInterval(() => {
+      countdownTime2 = updateTimer(countdownTime2, timerElement2, timer2, 1);
+    }, 1000);
   }
 }
 
-// Function to start Player 2's timer and pause Player 1's timer
 function startTimer2() {
   if (isPaused1) {
-    // Pause Player 1's timer if it's running
     clearInterval(timer2);
     isPaused2 = true;
-
-    // Start Player 2's timer
     isPaused1 = false;
-    setCSSVariable(true); // Set CSS for Player 2 active
-    timer1 = setInterval(updateTimer1, 1000);
+    setCSSVariable(true);
+    timer1 = setInterval(() => {
+      countdownTime1 = updateTimer(countdownTime1, timerElement1, timer1, 2);
+    }, 1000);
   }
 }
 
-// Event listeners for button clicks
-document.querySelector(".plyr-1").addEventListener("click", function () {
-  if (!isPaused1) {
-    startTimer2(); // Switch to Player 2's timer when Player 1's button is clicked
-  }
-});
+function restartTimer() {
+  winner.style.display = "none";
+  countdownTime1 = countdownTime2 = selectedTime;
+  isPaused1 = true;
+  isPaused2 = true;
+  clearInterval(timer1);
+  clearInterval(timer2);
+  setCSSVariable(false);
 
-document.querySelector(".plyr-2").addEventListener("click", function () {
-  if (!isPaused2) {
-    startTimer1(); // Switch to Player 1's timer when Player 2's button is clicked
-  }
-});
+  // Update timers to initial state
+  updateTimer(countdownTime1, timerElement1, timer1, 1);
+  updateTimer(countdownTime2, timerElement2, timer2, 2);
+}
