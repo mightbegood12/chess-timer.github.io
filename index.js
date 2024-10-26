@@ -14,10 +14,10 @@ const pause_btn = document.querySelector(".pause-btn");
 
 const clock_sound = new Audio("clock-tick-sound.mp3");
 const clock_switch_sound = new Audio("clock-switch-sound.mp3");
+clock_sound.volume = 0.4;
 
 function startGame() {
   gamePage.style.display = "none";
-  console.log(gamePage.style.display);
   selectedTime = parseInt(document.getElementById("countdownTime").value, 10);
   countdownTime1 = countdownTime2 = selectedTime;
   restartTimer();
@@ -29,6 +29,7 @@ function updateTimer(countdownTime, timerElement, timer, player) {
   let seconds = countdownTime % 60;
   seconds = seconds < 10 ? "0" + seconds : seconds;
   timerElement.textContent = `${minutes}:${seconds}`;
+  clock_sound.play();
 
   if (countdownTime <= 0) {
     clearInterval(timer);
@@ -37,8 +38,6 @@ function updateTimer(countdownTime, timerElement, timer, player) {
     winnerText.textContent = `Player ${player} Wins!`;
     clock_sound.pause();
     return;
-  } else {
-    clock_sound.play();
   }
 
   return countdownTime - 1; // Decrement and return the new time
