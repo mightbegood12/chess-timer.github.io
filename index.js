@@ -11,6 +11,8 @@ const timerElement1 = document.getElementById("Timer1");
 const timerElement2 = document.getElementById("Timer2");
 const gamePage = document.querySelector(".game-page");
 
+const audio = new Audio("clock-tick-sound.mp3");
+
 function startGame() {
   gamePage.style.display = "none";
   console.log(gamePage.style.display);
@@ -23,7 +25,7 @@ function startGame() {
 function updateTimer(countdownTime, timerElement, timer, player) {
   let minutes = Math.floor(countdownTime / 60);
   let seconds = countdownTime % 60;
-
+  audio.play();
   seconds = seconds < 10 ? "0" + seconds : seconds;
   timerElement.textContent = `${minutes}:${seconds}`;
 
