@@ -10,8 +10,10 @@ const winnerText = document.querySelector(".winner");
 const timerElement1 = document.getElementById("Timer1");
 const timerElement2 = document.getElementById("Timer2");
 const gamePage = document.querySelector(".game-page");
+const pause_btn = document.querySelector(".pause-btn");
 
-const audio = new Audio("clock-tick-sound.mp3");
+const clock_sound = new Audio("clock-tick-sound.mp3");
+const clock_switch_sound = new Audio("clock-switch-sound.mp3");
 
 function startGame() {
   gamePage.style.display = "none";
@@ -25,7 +27,6 @@ function startGame() {
 function updateTimer(countdownTime, timerElement, timer, player) {
   let minutes = Math.floor(countdownTime / 60);
   let seconds = countdownTime % 60;
-  audio.play();
   seconds = seconds < 10 ? "0" + seconds : seconds;
   timerElement.textContent = `${minutes}:${seconds}`;
 
@@ -34,14 +35,17 @@ function updateTimer(countdownTime, timerElement, timer, player) {
     timerElement.textContent = "Time's up!";
     winner.style.display = "flex";
     winnerText.textContent = `Player ${player} Wins!`;
+    clock_sound.pause();
     return;
+  } else {
+    clock_sound.play();
   }
 
   return countdownTime - 1; // Decrement and return the new time
 }
 
-function setCSSVariable(isPlayer1Active) {
-  if (isPlayer1Active) {
+function setCSSVariable(isPlayerActive) {
+  if (isPlayerActive) {
     document.documentElement.style.setProperty("--current-player", "red"); // Player 1 is active
     document.documentElement.style.setProperty("--waiting-player", "green"); // Player 2 is paused
   } else {
@@ -53,6 +57,7 @@ function setCSSVariable(isPlayer1Active) {
 // Function to start Player 1's timer and pause Player 2's timer
 function startTimer1() {
   if (isPaused2) {
+    clock_switch_sound.play();
     clearInterval(timer1);
     isPaused2 = false;
     isPaused1 = true;
@@ -65,6 +70,7 @@ function startTimer1() {
 
 function startTimer2() {
   if (isPaused1) {
+    clock_switch_sound.play();
     clearInterval(timer2);
     isPaused2 = true;
     isPaused1 = false;
@@ -76,6 +82,7 @@ function startTimer2() {
 }
 
 function restartTimer() {
+  clock_sound.pause();
   winner.style.display = "none";
   countdownTime1 = countdownTime2 = selectedTime;
   isPaused1 = true;
@@ -87,4 +94,13 @@ function restartTimer() {
   // Update timers to initial state
   updateTimer(countdownTime1, timerElement1, timer1, 1);
   updateTimer(countdownTime2, timerElement2, timer2, 2);
+  startTimer1();
+}
+
+function pauseTimer() {
+  isPaused1 = true;
+  isPaused2 = true;
+  clearInterval(timer1);
+  clearInterval(timer2);
+  clock_sound.pause();
 }
