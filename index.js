@@ -2,6 +2,7 @@ let countdownTime1, countdownTime2;
 let timer1, timer2;
 let isPaused1 = true;
 let isPaused2 = true;
+let isMuted = false;
 let selectedTime;
 
 const winner = document.querySelector(".winner-display");
@@ -14,7 +15,11 @@ const pause_btn = document.querySelector(".pause-btn");
 
 const clock_sound = new Audio("clock-tick-sound.mp3");
 const clock_switch_sound = new Audio("clock-switch-sound.mp3");
+const theme_sound = new Audio("interstellar.mp3");
 clock_sound.volume = 0.4;
+theme_sound.loop = true;
+theme_sound.volume = 0.4;
+theme_sound.play();
 
 function startGame() {
   gamePage.style.display = "none";
@@ -22,6 +27,7 @@ function startGame() {
   countdownTime1 = countdownTime2 = selectedTime;
   restartTimer();
   startTimer1();
+  theme_sound.volume = 0.1;
 }
 
 function updateTimer(countdownTime, timerElement, timer, player) {
@@ -103,3 +109,17 @@ function pauseTimer() {
   clearInterval(timer2);
   clock_sound.pause();
 }
+
+function toggleTheme() {
+  const muteButton = document.querySelector(".mute-theme");
+  if (isMuted) {
+    theme_sound.play();
+    muteButton.innerHTML = "&#128266;"; // Play icon
+  } else {
+    theme_sound.pause();
+    muteButton.innerHTML = "&#128263;"; // Mute icon
+  }
+  isMuted = !isMuted; // Toggle mute state
+}
+
+document.querySelector(".mute-theme").addEventListener("click", toggleTheme);
