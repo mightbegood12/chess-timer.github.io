@@ -4,6 +4,7 @@ let isPaused1 = true;
 let isPaused2 = true;
 let isMuted = false;
 let selectedTime;
+let gameStarted = false;
 
 const winner = document.querySelector(".winner-display");
 const winnerBtn = document.querySelector(".btn-restart");
@@ -22,12 +23,20 @@ theme_sound.volume = 0.5;
 theme_sound.autoplay = true;
 
 function startGame() {
+  gameStarted = true;
   gamePage.style.display = "none";
   selectedTime = parseInt(document.getElementById("countdownTime").value, 10);
   countdownTime1 = countdownTime2 = selectedTime;
   restartTimer();
   startTimer1();
   theme_sound.volume = 0.2;
+  if (gameStarted) {
+    document.addEventListener("keyup", (event) => {
+      if (event.code === "Space") {
+        toggleTimer();
+      }
+    });
+  }
 }
 
 function updateTimer(countdownTime, timerElement, timer, player) {
@@ -43,6 +52,7 @@ function updateTimer(countdownTime, timerElement, timer, player) {
     winner.style.display = "flex";
     winnerText.textContent = `Player ${player} Wins!`;
     clock_sound.pause();
+    gameStarted = false;
     return;
   }
 
@@ -110,16 +120,25 @@ function pauseTimer() {
   clock_sound.pause();
 }
 
-function toggleTheme() {
+function toggleTheme(event) {
+  event.preventDefault();
   const muteButton = document.querySelector(".mute-theme");
   if (isMuted) {
     theme_sound.play();
-    muteButton.innerHTML = "&#128266;"; // Play icon
+    muteButton.innerHTML = "&#128266;";
   } else {
     theme_sound.pause();
-    muteButton.innerHTML = "&#128263;"; // Mute icon
+    muteButton.innerHTML = "&#128263;";
   }
-  isMuted = !isMuted; // Toggle mute state
+  isMuted = !isMuted;
+}
+
+function toggleTimer() {
+  if (isPaused2) {
+    startTimer1();
+  } else if (isPaused1) {
+    startTimer2();
+  }
 }
 
 document.querySelector(".mute-theme").addEventListener("click", toggleTheme);
