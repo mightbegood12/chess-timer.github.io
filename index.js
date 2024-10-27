@@ -18,8 +18,8 @@ const clock_switch_sound = new Audio("clock-switch-sound.mp3");
 const theme_sound = new Audio("interstellar.mp3");
 clock_sound.volume = 0.4;
 theme_sound.loop = true;
-theme_sound.volume = 0.4;
-theme_sound.play();
+theme_sound.volume = 0.5;
+theme_sound.autoplay = true;
 
 function startGame() {
   gamePage.style.display = "none";
@@ -27,7 +27,7 @@ function startGame() {
   countdownTime1 = countdownTime2 = selectedTime;
   restartTimer();
   startTimer1();
-  theme_sound.volume = 0.1;
+  theme_sound.volume = 0.2;
 }
 
 function updateTimer(countdownTime, timerElement, timer, player) {
